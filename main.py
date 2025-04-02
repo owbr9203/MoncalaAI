@@ -55,11 +55,11 @@ def main():
         play_game(player1, player2, game)
         
         
-        print("player1::")
+        print("==============================player1==============================")
         player1.display_stats()
-        print("player2::")
+        print("==============================player2==============================")
         player2.display_stats()
-        print(game)
+        print(game.display_board())
 
         
 if __name__ == "__main__":
