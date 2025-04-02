@@ -108,6 +108,7 @@ class Mancala:
 
         self.moves.append((self.current_player, pit + 1))  # Records the move
         self.current_player = 2 if self.current_player == 1 else 1  # Switches the current player
+        return 0
         
     
     def winning_eval(self):
