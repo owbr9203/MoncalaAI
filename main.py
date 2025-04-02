@@ -24,8 +24,8 @@ def play_game(player1: player, player2: player, game:m):
                     player2.num_wins += 1
                     break
                 case _:
-                    player1.num_ties += 1
-                    player2.num_ties += 1  
+                    player1.num_tie += 1
+                    player2.num_tie += 1  
                     break   
         if curr_player == 1:
 
@@ -49,7 +49,7 @@ def main():
     
     player1, player2 = player.RandomPlayer(), player.RandomPlayer()
 
-    for i in range(1):
+    for i in range(100):
         
         game = m.Mancala()
         play_game(player1, player2, game)
