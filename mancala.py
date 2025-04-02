@@ -59,24 +59,36 @@ class Mancala:
         Generates random valid moves with non-empty pits for the random player
         """
         
+        pits = []
+        
+        for pit in range(len(self.board)):
+            if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
+                pits.append(pit)
+                
+        random_pit = random.randint(0, len(pits) - 1)
+        return pits[random_pit] + 1
+    
         if self.current_player==1:
             options = [pit for pit in range(1,self.pits_per_player+1) if self.valid_move(pit)]
         else:
             options = [pit for pit in range(1,self.pits_per_player+1) if self.valid_move(pit)]
         return choice(options)
     
+    
     def play(self, pit):
         """
         Simulates a single move made by a specific player using their selected pit.
         """
+        
+        turns = 0
         pit -= 1 # 1 based index  # Adjusts the pit index to 0-based
         if not self.valid_move(pit):
-            # print("INVALID MOVE")
-            return -1 # Exits if the move is invalid
+            print("INVALID MOVE")
+            return -1, turns # Exits if the move is invalid
         
         if self.winning_eval() != 0:
             # print("GAME OVER")
-            return self.winning_eval() # Exits if the game is over
+            return self.winning_eval(), turns # Exits if the game is over
         
         stones = self.board[pit]  # Number of stones in the selected pit
         self.board[pit] = 0  # Empties the selected pit
@@ -88,6 +100,7 @@ class Mancala:
                     self.current_player == 2 and current_pit == self.p1_mancala_index):
                 current_pit = (current_pit + 1) % len(self.board)  # Skips the opponent's mancala
             self.board[current_pit] += 1  # Drops a stone in the current pit
+            turns += 1
             stones -= 1  # Decrements the number of stones
 
         # checks for if you end on pit
@@ -104,11 +117,11 @@ class Mancala:
                 self.board[self.p2_mancala_index] += self.board[opposite_pit] + 1  # Captures the stones in the opposite pit
                 self.board[opposite_pit] = 0  # Empties the opposite pit
                 self.board[current_pit] = 0  # Empties the current pit
-            
+
 
         self.moves.append((self.current_player, pit + 1))  # Records the move
         self.current_player = 2 if self.current_player == 1 else 1  # Switches the current player
-        return 0
+        return 0, turns
         
     
     def winning_eval(self):
