@@ -71,12 +71,12 @@ class Mancala:
         """
         pit -= 1 # 1 based index  # Adjusts the pit index to 0-based
         if not self.valid_move(pit):
-            print("INVALID MOVE")
-            return  # Exits if the move is invalid
+            # print("INVALID MOVE")
+            return -1 # Exits if the move is invalid
         
         if self.winning_eval() != 0:
-            print("GAME OVER")
-            return  # Exits if the game is over
+            # print("GAME OVER")
+            return self.winning_eval() # Exits if the game is over
         
         stones = self.board[pit]  # Number of stones in the selected pit
         self.board[pit] = 0  # Empties the selected pit
