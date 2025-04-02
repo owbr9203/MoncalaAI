@@ -1,4 +1,5 @@
 import random
+from random import choice
 random.seed(109)  # Seeds the random number generator for reproducibility
 
 class Mancala:
@@ -58,14 +59,11 @@ class Mancala:
         Generates random valid moves with non-empty pits for the random player
         """
         
-        pits = []  # List to hold valid pits
-        
-        for pit in range(len(self.board)):
-            if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
-                pits.append(pit)  # Adds non-empty pits that are not mancalas to the list
-                
-        random_pit = random.randint(0, len(pits) - 1)  # Selects a random pit from the list
-        return pits[random_pit] + 1  # Returns the selected pit with a 1-based index
+        if self.current_player==1:
+            options = [pit for pit in range(1,self.pits_per_player+1) if self.valid_move(pit)]
+        else:
+            options = [pit for pit in range(1,self.pits_per_player+1) if self.valid_move(pit)]
+        return choice(options)
     
     def play(self, pit):
         """
