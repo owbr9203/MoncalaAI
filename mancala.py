@@ -64,7 +64,12 @@ class Mancala:
         for pit in range(len(self.board)):
             if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
                 pits.append(pit)
-                
+        
+        # if len(pits) == 1 or len(pits) == 0:
+        #     self.display_board()
+        #     print("len pits", pits)
+        #     return pits[0]
+        
         random_pit = random.randint(0, len(pits) - 1)
         return pits[random_pit] + 1
     
@@ -86,9 +91,7 @@ class Mancala:
             print("INVALID MOVE")
             return -1, turns # Exits if the move is invalid
         
-        if self.winning_eval() != 0:
-            # print("GAME OVER")
-            return self.winning_eval(), turns # Exits if the game is over
+
         
         stones = self.board[pit]  # Number of stones in the selected pit
         self.board[pit] = 0  # Empties the selected pit
@@ -121,6 +124,12 @@ class Mancala:
 
         self.moves.append((self.current_player, pit + 1))  # Records the move
         self.current_player = 2 if self.current_player == 1 else 1  # Switches the current player
+        
+        if self.winning_eval() != 0:
+            # print("GAME OVER")
+            return self.winning_eval(), turns # Exits if the game is over
+        
+        
         return 0, turns
         
     
