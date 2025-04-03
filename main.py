@@ -60,7 +60,7 @@ def main():
         player2.display_stats()
         print("=============================game stats============================")
         print("average turns per game: {}".format(total_turns/(i+1)))
-        print(game.display_board())
+        # print(game.display_board())
 
         
 if __name__ == "__main__":
