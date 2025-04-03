@@ -8,13 +8,6 @@ class RandomPlayer():
         self.num_wins = 0
         self.num_loss = 0
         self.num_tie = 0
-        self.turns = 0 # this is for each stone dropped into a pit
-    
-    def getAvgTurns(self):
-        """
-        Calculates the average turns the player takes by dividing turns by number of games
-        """
-        return self.turns/(self.num_wins+self.num_loss+self.num_tie)
     
     def getAvgWins(self):
         """
@@ -38,8 +31,3 @@ class RandomPlayer():
         print("win percentage:", self.getAvgWins())
         print("loss percentage:", self.getAvgLosses())
         print("tie percentage:", self.getAvgTies())
-        print("average turns:", self.getAvgTurns())
-        
-        
-    def increment_turns(self, num):
-        self.turns += num

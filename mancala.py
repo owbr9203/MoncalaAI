@@ -1,6 +1,7 @@
 import random
 from random import choice
-random.seed(109)  # Seeds the random number generator for reproducibility
+import time
+random.seed(time.process_time_ns())  # Seeds the random number generator for reproducibility
 
 class Mancala:
     def __init__(self, pits_per_player=6, stones_per_pit = 4):
@@ -85,11 +86,10 @@ class Mancala:
         Simulates a single move made by a specific player using their selected pit.
         """
         
-        turns = 0
         pit -= 1 # 1 based index  # Adjusts the pit index to 0-based
         if not self.valid_move(pit):
             print("INVALID MOVE")
-            return -1, turns # Exits if the move is invalid
+            return -1 # Exits if the move is invalid
         
 
         
@@ -103,7 +103,6 @@ class Mancala:
                     self.current_player == 2 and current_pit == self.p1_mancala_index):
                 current_pit = (current_pit + 1) % len(self.board)  # Skips the opponent's mancala
             self.board[current_pit] += 1  # Drops a stone in the current pit
-            turns += 1
             stones -= 1  # Decrements the number of stones
 
         # checks for if you end on pit
@@ -127,10 +126,10 @@ class Mancala:
         
         if self.winning_eval() != 0:
             # print("GAME OVER")
-            return self.winning_eval(), turns # Exits if the game is over
+            return self.winning_eval() # Exits if the game is over
         
         
-        return 0, turns
+        return 0
         
     
     def winning_eval(self):
