@@ -17,7 +17,7 @@ def play_game(player1: player, player2: player, game:m):
     while(playing):
         status = game.play(game.random_move_generator())
         # print(status, "stones: ", find_total_stones(game))
-        game.display_board()
+        # game.display_board()
         turns+=1
         if status < 0 :
             print("Failled")
@@ -51,7 +51,7 @@ def main():
     
     player1, player2 = player.RandomPlayer(), player.RandomPlayer()
     total_turns = 0
-    for i in range(1):
+    for i in range(100):
         
         game = m.Mancala()
         total_turns += play_game(player1, player2, game)

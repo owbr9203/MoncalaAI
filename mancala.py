@@ -61,15 +61,16 @@ class Mancala:
         """
         
         pits = []
-        
-        for pit in range(len(self.board)):
-            if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
-                pits.append(pit)
-        
-        # if len(pits) == 1 or len(pits) == 0:
-        #     self.display_board()
-        #     print("len pits", pits)
-        #     return pits[0]
+        if self.current_player == 1:
+            
+            for pit in range(self.p1_mancala_index):
+                if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
+                    pits.append(pit)
+        else:
+            for pit in range(self.p1_mancala_index + 1, self.p2_mancala_index):
+                if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
+                    pits.append(pit)
+
         
         random_pit = random.randint(0, len(pits) - 1)
         return pits[random_pit] + 1
