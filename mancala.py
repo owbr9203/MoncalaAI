@@ -105,20 +105,23 @@ class Mancala:
             self.board[current_pit] += 1  # Drops a stone in the current pit
             stones -= 1  # Decrements the number of stones
 
+
         # checks for if you end on pit
         if self.current_player == 1 and current_pit in range(self.p1_pits_index[0], self.p1_pits_index[1] + 1) and self.board[current_pit] == 1:
             opposite_pit = self.p2_mancala_index - current_pit - 1  # Calculates the opposite pit
-            if self.board[opposite_pit] > 0:
-                self.board[self.p1_mancala_index] += self.board[opposite_pit] + 1  # Captures the stones in the opposite pit
-                self.board[opposite_pit] = 0  # Empties the opposite pit
-                self.board[current_pit] = 0  # Empties the current pit
+            
+            self.board[current_pit] = 0  # Empties the current pit
+
+            self.board[self.p1_mancala_index] += self.board[opposite_pit] + 1# Captures the stones in the opposite pit
+            self.board[opposite_pit] = 0  # Empties the opposite pit
+                
 
         elif self.current_player == 2 and current_pit in range(self.p2_pits_index[0], self.p2_pits_index[1] + 1) and self.board[current_pit] == 1:
-            opposite_pit = self.p1_mancala_index + self.p2_mancala_index - current_pit - 1  # Calculates the opposite pit
-            if self.board[opposite_pit] > 0:
-                self.board[self.p2_mancala_index] += self.board[opposite_pit] + 1  # Captures the stones in the opposite pit
-                self.board[opposite_pit] = 0  # Empties the opposite pit
-                self.board[current_pit] = 0  # Empties the current pit
+            opposite_pit = self.p2_mancala_index - current_pit - 1  # Calculates the opposite pit
+            
+            self.board[current_pit] = 0  # Empties the current pit
+            self.board[self.p2_mancala_index] += self.board[opposite_pit] + 1 # Captures the stones in the opposite pit
+            self.board[opposite_pit] = 0  # Empties the opposite pit
 
 
         self.moves.append((self.current_player, pit + 1))  # Records the move

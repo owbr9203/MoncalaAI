@@ -2,6 +2,13 @@ import mancala as m
 import RandomPlayer as player
 
 
+def find_total_stones(game):
+    total = 0
+    for i in game.board:
+        total += i
+    return total
+
+
 def play_game(player1: player, player2: player, game:m):
     playing = True
     curr_player = 1
@@ -9,6 +16,8 @@ def play_game(player1: player, player2: player, game:m):
     
     while(playing):
         status = game.play(game.random_move_generator())
+        # print(status, "stones: ", find_total_stones(game))
+        game.display_board()
         turns+=1
         if status < 0 :
             print("Failled")
@@ -34,13 +43,7 @@ def play_game(player1: player, player2: player, game:m):
         else:
             curr_player = 1
     return turns
-        # status, turns = game.play(game.random_move_generator())
-        # if status < 0 :
-        #     print("Failled")
-        #     return
-        # if status > 0:
-        #     print("Finished game")
-        #     break
+
 
 
 
@@ -48,7 +51,7 @@ def main():
     
     player1, player2 = player.RandomPlayer(), player.RandomPlayer()
     total_turns = 0
-    for i in range(100):
+    for i in range(1):
         
         game = m.Mancala()
         total_turns += play_game(player1, player2, game)
