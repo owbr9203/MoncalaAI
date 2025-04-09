@@ -75,12 +75,6 @@ class Mancala:
         random_pit = random.randint(0, len(pits) - 1)
         return pits[random_pit] + 1
     
-        if self.current_player==1:
-            options = [pit for pit in range(1,self.pits_per_player+1) if self.valid_move(pit)]
-        else:
-            options = [pit for pit in range(1,self.pits_per_player+1) if self.valid_move(pit)]
-        return choice(options)
-    
     
     def play(self, pit):
         """
