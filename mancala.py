@@ -1,6 +1,7 @@
 import random
 from random import choice
 import time
+import sys
 random.seed(time.process_time_ns())  # Seeds the random number generator for reproducibility
 
 class Mancala:
@@ -156,3 +157,44 @@ class Mancala:
         if res1 > res2: return 1  # Player 1 wins
         if res2 > res1: return 2  # Player 2 wins
         return 3  # It's a tie
+
+    def utility(self,val):
+        if self.current_player==1: #If it's player
+            if val==1:
+                return 20
+            elif val==3:
+                return 0
+            else:
+                return -20
+        else:
+            if val==1:
+                return -20
+            elif val==3:
+                return 0
+            else:
+                return 20
+
+    def max_value(self,state,alpha,beta):
+        terminal = state.winning_eval() #Calculates whether this state is a final state
+        if terminal>0:
+            return self.utility(terminal) #Calculate the utility of this state for the player whose current turn it is
+
+
+    def alphabeta_search(self):
+        #This chunk of code finds all the valid actions which are all the non-zero pits on the players side
+        """ pits = []
+        if self.current_player == 1:
+            
+            for pit in range(self.p1_mancala_index):
+                if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
+                    pits.append(pit)
+        else:
+            for pit in range(self.p1_mancala_index + 1, self.p2_mancala_index):
+                if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
+                    pits.append(pit) """
+        
+        alpha = -sys.maxsize-1
+        beta = sys.maxsize
+        state = self
+        pit,value = self.max_value(state,alpha,beta)
+        return pit
