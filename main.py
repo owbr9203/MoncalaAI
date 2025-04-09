@@ -1,5 +1,5 @@
 import mancala as m
-import RandomPlayer as player
+import Player as player
 
 
 def find_total_stones(game):

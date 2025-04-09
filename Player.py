@@ -1,6 +1,6 @@
 import mancala as m
 
-class RandomPlayer():
+class Player():
     def __init__(self):
         """
         Initializes a Random Player that plays mancala
