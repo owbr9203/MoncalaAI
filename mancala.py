@@ -187,12 +187,12 @@ class Mancala:
         """
         Calculates the maximum value the player can get out of this state.
         """
-        terminal = state.winning_eval() #Calculates whether this state is a final state
+        terminal = default_state.winning_eval() #Calculates whether this state is a final state
         if terminal>0:
             return self.utility(terminal) #Calculate the utility of this state for the player whose current turn it is
         value = -2
         pit_to_return = -1
-        pits = state.valid_moves() #Figure out what actions are possible
+        pits = default_state.valid_moves() #Figure out what actions are possible
         for pit in pits: #For every action...
             state = default_state #Reset state
             state.play(pit) #Perform the action on that state
@@ -208,12 +208,12 @@ class Mancala:
         """
         Calculates the minimum value the player can get out of this state.
         """
-        terminal = state.winning_eval() #Calculates whether this state is a final state
+        terminal = default_state.winning_eval() #Calculates whether this state is a final state
         if terminal>0:
             return self.utility(terminal) #Calculate the utility of this state for the player whose current turn it is
         value = 2
         pit_to_return = -1
-        pits = state.valid_moves() #Figure out what actions are possible
+        pits = default_state.valid_moves() #Figure out what actions are possible
         for pit in pits: #For every action...
             state = default_state #Reset state
             state.play(pit) #Perform that action on the state
