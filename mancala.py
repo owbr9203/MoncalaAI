@@ -56,11 +56,7 @@ class Mancala:
         
         return True  # If all checks pass, the move is valid
         
-    def random_move_generator(self):
-        """
-        Generates random valid moves with non-empty pits for the random player
-        """
-        
+    def valid_moves(self):
         pits = []
         if self.current_player == 1:
             
@@ -71,8 +67,14 @@ class Mancala:
             for pit in range(self.p1_mancala_index + 1, self.p2_mancala_index):
                 if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
                     pits.append(pit)
+        return pits
 
+    def random_move_generator(self):
+        """
+        Generates random valid moves with non-empty pits for the random player
+        """
         
+        pits = self.valid_moves()
         random_pit = random.randint(0, len(pits) - 1)
         return pits[random_pit] + 1
     
@@ -159,42 +161,80 @@ class Mancala:
         return 3  # It's a tie
 
     def utility(self,val):
-        if self.current_player==1: #If it's player
+        """
+        Calculates the utility of an outcome for a player based on an integer representing a terminal state.
+        """
+        #TO-DO: See if this can/should be altered to work with difference in marbles rather than simply a winning state
+
+        #Pros of just using terminal states: Easy, stops everything if a win is found
+        #Pros of using difference in marbles: More complicated, may have to rework winning_eval or make a new method, could be much less expensive
+        if self.current_player==1:
             if val==1:
-                return 20
+                return 1
             elif val==3:
                 return 0
             else:
-                return -20
+                return -1
         else:
             if val==1:
-                return -20
+                return -1
             elif val==3:
                 return 0
             else:
-                return 20
+                return 1
 
-    def max_value(self,state,alpha,beta):
+    def max_value(self,default_state,alpha,beta):
+        """
+        Calculates the maximum value the player can get out of this state.
+        """
         terminal = state.winning_eval() #Calculates whether this state is a final state
         if terminal>0:
             return self.utility(terminal) #Calculate the utility of this state for the player whose current turn it is
+        value = -2
+        pit_to_return = -1
+        pits = state.valid_moves() #Figure out what actions are possible
+        for pit in pits: #For every action...
+            state = default_state #Reset state
+            state.play(pit) #Perform the action on that state
+            pit_val = self.min_value(state.play(pit),alpha,beta)#Examine value of that action what can be gained from that action
+            if pit_val>value: #If the worst move your opponent can force you into in this state is better than the worst move they can force you into in another state...
+                value = pit_val #Select this value as our best value
+                pit_to_return = pit #Bookmark the pit or action chosen
+            if value>=beta: return value,pit_to_return #Prune if a value is found that is guaranteed to be chosen
+            alpha = max(value,alpha) #Calculate new alpha if needed
+        return value,pit_to_return #Return the value at this state
+    
+    def min_value(self,default_state,alpha,beta):
+        """
+        Calculates the minimum value the player can get out of this state.
+        """
+        terminal = state.winning_eval() #Calculates whether this state is a final state
+        if terminal>0:
+            return self.utility(terminal) #Calculate the utility of this state for the player whose current turn it is
+        value = 2
+        pit_to_return = -1
+        pits = state.valid_moves() #Figure out what actions are possible
+        for pit in pits: #For every action...
+            state = default_state #Reset state
+            state.play(pit) #Perform that action on the state
+            pit_val = self.max_value(state,alpha,beta) #Examine value of that action what can be gained from that action
+            if pit_val<value: #If the best move the opponent can make in this state is worse than the best move they can make in another state...
+                value = pit_val #Select this value as our best value
+                pit_to_return = pit #Bookmark the pit or action chosen
+            if value<=alpha: return value, pit_to_return #Prune if a value is found that is guaranteed to be chosen
+            beta = min(value,alpha) #Calculate new beta if needed
+        return value, pit_to_return #Return the value at this state
 
 
     def alphabeta_search(self):
-        #This chunk of code finds all the valid actions which are all the non-zero pits on the players side
-        """ pits = []
-        if self.current_player == 1:
-            
-            for pit in range(self.p1_mancala_index):
-                if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
-                    pits.append(pit)
-        else:
-            for pit in range(self.p1_mancala_index + 1, self.p2_mancala_index):
-                if self.board[pit] > 0 and pit != self.p1_mancala_index and pit != self.p2_mancala_index:
-                    pits.append(pit) """
-        
-        alpha = -sys.maxsize-1
-        beta = sys.maxsize
+        """
+        Performs AlphaBeta on the Mancala game.
+        """
+        #TO-DO: Decide whether to keep this as a member of the Mancala class OR make it separate
+        #Pros of keeping it in: Less work and difference may be marginal
+        #Pros of keeping it separate: More work but difference may be craazyyy
+        alpha = -2
+        beta = 2
         state = self
-        pit,value = self.max_value(state,alpha,beta)
+        value,pit = self.max_value(state,alpha,beta)
         return pit
