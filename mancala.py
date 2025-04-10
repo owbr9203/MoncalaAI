@@ -167,7 +167,7 @@ class Mancala:
         #TO-DO: See if this can/should be altered to work with difference in marbles rather than simply a winning state
 
         #Pros of just using terminal states: Easy, stops everything if a win is found
-        #Pros of using difference in marbles: More complicated, may have to rework winning_eval or make a new method, could be much less expensive
+        #Pros of using difference in marbles: More complicated, may have to rework winning_eval or make a new method, could be much less expensive since a state of 32 to 4 may not be a winning state but is a good indicator of optimal play.
         if self.current_player==1:
             if val==1:
                 return 1
