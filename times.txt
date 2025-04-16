@@ -33,6 +33,7 @@ Wins: 3, Losses: 7, Ties: 0
 Average turns per game: 25.9
 time:  42.84019589424133
 
+
 depth 12:
 Game 100 Results:
 ==============================player1==============================
@@ -42,3 +43,4 @@ Wins: 8, Losses: 90, Ties: 2
 =============================game stats============================
 Average turns per game: 23.8
 time:  290.52808904647827
+
