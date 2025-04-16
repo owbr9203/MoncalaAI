@@ -1,5 +1,6 @@
 import mancala as m
 import Player as player
+import time
 
 
 def find_total_stones(game):
@@ -120,6 +121,9 @@ def play_game_alphabeta_rand(player1: player, player2: player, game:m, depth: in
 
 def main():
     
+    
+    start_time = time.time()
+    
     player1, player2 = player.Player(), player.Player()
     total_turns = 0
     for i in range(100):
@@ -137,6 +141,8 @@ def main():
         # print(game.display_board())
         print(i)
     print(game.display_board())
+    
+    print("time: ", time.time() - start_time)
         
 if __name__ == "__main__":
     main()

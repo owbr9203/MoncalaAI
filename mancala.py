@@ -174,58 +174,61 @@ class Mancala:
         else:
             return self.board[self.p2_mancala_index] - self.board[self.p1_mancala_index]
 
-    def max_value(self,default_state,alpha,beta,depth,player):
+
+    def max_value(self, default_state, alpha, beta, depth, player):
         """
         Calculates the maximum value the player can get out of this state.
         """
-        terminal = default_state.winning_eval() #Calculates whether this state is a final state
-        if terminal>0 or depth==0:
-            return self.utility(player),-1 #Calculate the utility of this state for the player whose current turn it is
-        value = -1*(self.pits_per_player * self.stones_per_pit*2 + 1)
+        terminal = default_state.winning_eval()  # Calculates whether this state is a final state
+        if terminal > 0 or depth == 0:
+            return self.utility(player), -1  # Calculate the utility of this state for the player whose current turn it is
+        value = -1 * (self.pits_per_player * self.stones_per_pit * 2 + 1)
         pit_to_return = -1
-        pits = default_state.valid_moves() #Figure out what actions are possible (0-index)
-        for pit in pits: #For every action...
-            state = copy.deepcopy(default_state)#Clone the board state
-            state.play(pit) #Play move on this hypothetical board
-            pit_val, _ = self.min_value(state, alpha, beta,depth-1,player) #Determine value after making that move
-            if pit_val>value: #If the worst move your opponent can force you into in this state is better than the worst move they can force you into in another state...
-                value = pit_val #Select this value as our best value
-                pit_to_return = pit #Bookmark the pit or action chosen
-            if value>=beta: return value,pit_to_return #Prune if a value is found that is guaranteed to be chosen
-            alpha = max(value,alpha) #Calculate new alpha if needed
-        return value,pit_to_return #Return the value at this state
-    
-    def min_value(self,default_state,alpha,beta,depth,player):
+        pits = default_state.valid_moves()  # Figure out what actions are possible (0-index)
+        for pit in pits:  # For every action...
+            state = copy.deepcopy(default_state)  # Clone the board state
+            state.play(pit)  # Play move on this hypothetical board
+            pit_val, _ = self.min_value(state, alpha, beta, depth - 1, player)  # Determine value after making that move
+            if pit_val > value:  # If the worst move your opponent can force you into in this state is better than the worst move they can force you into in another state...
+                value = pit_val  # Select this value as our best value
+                pit_to_return = pit  # Bookmark the pit or action chosen
+            if value >= beta: return value, pit_to_return  # Prune if a value is found that is guaranteed to be chosen
+            alpha = max(value, alpha)  # Calculate new alpha if needed
+        return value, pit_to_return  # Return the value at this state
+
+
+    def min_value(self, default_state, alpha, beta, depth, player):
         """
         Calculates the minimum value the player can get out of this state.
         """
-        terminal = default_state.winning_eval() #Calculates whether this state is a final state
-        if terminal>0 or depth==0:
-            return self.utility(player),-1 #Calculate the utility of this state for the player whose current turn it is
-        value = self.pits_per_player * self.stones_per_pit*2 + 1
+        terminal = default_state.winning_eval()  # Calculates whether this state is a final state
+        if terminal > 0 or depth == 0:
+            return self.utility(player), -1  # Calculate the utility of this state for the player whose current turn it is
+        value = self.pits_per_player * self.stones_per_pit * 2 + 1
         pit_to_return = -1
-        pits = default_state.valid_moves() #Figure out what actions are possible (0-index)
-        for pit in pits: #For every action...
-            state = copy.deepcopy(default_state) #Clone the board state
-            state.play(pit) #Play move on this hypothetical board
-            pit_val, _ = self.max_value(state, alpha, beta,depth-1,player) #Determine value after making that move
-            if pit_val<value: #If the best move the opponent can make in this state is worse than the best move they can make in another state...
-                value = pit_val #Select this value as our best value
-                pit_to_return = pit #Bookmark the pit or action chosen
-            if value<=alpha: return value, pit_to_return #Prune if a value is found that is guaranteed to be chosen
-            beta = min(value,beta) #Calculate new beta if needed
-        return value, pit_to_return #Return the value at this state
+        pits = default_state.valid_moves()  # Figure out what actions are possible (0-index)
+        for pit in pits:  # For every action...
+            state = copy.deepcopy(default_state)  # Clone the board state
+            state.play(pit)  # Play move on this hypothetical board
+            pit_val, _ = self.max_value(state, alpha, beta, depth - 1, player)  # Determine value after making that move
+            if pit_val < value:  # If the best move the opponent can make in this state is worse than the best move they can make in another state...
+                value = pit_val  # Select this value as our best value
+                pit_to_return = pit  # Bookmark the pit or action chosen
+            if value <= alpha: return value, pit_to_return  # Prune if a value is found that is guaranteed to be chosen
+            beta = min(value, beta)  # Calculate new beta if needed
+        return value, pit_to_return  # Return the value at this state
 
 
-    def alphabeta_search(self,depth,player=1):
+    def alphabeta_search(self, depth, player=1):
         """
         Performs AlphaBeta on the Mancala game.
         """
-        #TO-DO: Decide whether to keep this as a member of the Mancala class OR make it separate
-        #Pros of keeping it in: Less work and difference may be marginal
-        #Pros of keeping it separate: More work but difference may be craazyyy
-        beta = self.pits_per_player * self.stones_per_pit*2 + 1
+        # TO-DO: Decide whether to keep this as a member of the Mancala class OR make it separate
+        # Pros of keeping it in: Less work and difference may be marginal
+        # Pros of keeping it separate: More work but difference may be craazyyy
+        
+        beta = self.pits_per_player * self.stones_per_pit * 2 + 1
         alpha = -beta
         state = copy.deepcopy(self)
-        value,pit = self.max_value(state,alpha,beta,depth,player)
+        value, pit = self.max_value(state, alpha, beta, depth, player)
         return pit
