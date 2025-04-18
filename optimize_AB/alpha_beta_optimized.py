@@ -24,10 +24,10 @@ class AB_OPTIMIZED:
                 if board[pit_index+self.man_obj.p2_pits_index[0]]==0: #If player 2 has empty pits...
                     p2_heuristic+=1
         if player==1:
-            heuristic = (0.5)*(p2_heuristic-p1_heuristic)
+            heuristic = (2)*(p2_heuristic-p1_heuristic)
             return board[self.man_obj.p1_mancala_index] - board[self.man_obj.p2_mancala_index] + heuristic
         else:
-            heuristic = (0.5)*(p1_heuristic-p2_heuristic)
+            heuristic = (2)*(p1_heuristic-p2_heuristic)
             return board[self.man_obj.p2_mancala_index] - board[self.man_obj.p1_mancala_index] + heuristic
 
 

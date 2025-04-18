@@ -255,7 +255,7 @@ def play_game_and_update_stats(args):
 def new_main():
     start_time = time.time()
 
-    num_games = 500
+    num_games = 100
     depth = 8
     
     # Create game instances and depth parameters
