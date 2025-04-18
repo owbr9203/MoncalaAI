@@ -11,6 +11,40 @@ def find_total_stones(game):
         total += i
     return total
 
+def player_vs_player(player1: player, player2: player, game:m):
+    playing = True
+    curr_player = 1
+    turns = 0
+    
+    while(playing):
+
+        status = game.play(game.valid_move_helper(game.board,curr_player))
+        game.display_board(game.board,curr_player)
+        turns+=1
+        if status < 0 :
+            print("Failled")
+            return turns
+        
+        if status > 0:
+            print("Finished game")
+            match status:
+                case 1:
+                    player1.num_wins += 1
+                    player2.num_loss += 1
+                    break
+                case 2:
+                    player1.num_loss += 1
+                    player2.num_wins += 1
+                    break
+                case _:
+                    player1.num_tie += 1
+                    player2.num_tie += 1  
+                    break   
+        if curr_player == 1:
+            curr_player = 2
+        else:
+            curr_player = 1
+    return turns
 
 def play_rand_game(player1: player, player2: player, game:m):
     playing = True
@@ -83,6 +117,9 @@ def play_game_alphabeta(player1: player, player2: player, game:m,depth: int=30):
     return turns
 
 def play_game_alphabeta_rand(player1: player, player2: player, game:m, depth: int = 10):
+    """
+    Assumes player 1 is alphabeta.
+    """
     playing = True
     curr_player = 1
     turns = 0
@@ -98,7 +135,53 @@ def play_game_alphabeta_rand(player1: player, player2: player, game:m, depth: in
         if curr_player==2:
             status = game.play(game.random_move_generator(game.board, 2),game.board, 2)
         # print(status, "stones: ", find_total_stones(game))
-        # game.display_board()
+        #game.display_board(game.board,curr_player)
+        turns+=1
+        if status < 0 :
+            print("Failed")
+            return turns
+        
+        if status > 0:
+            print("Finished game")
+            match status:
+                case 1:
+                    player1.num_wins += 1
+                    player2.num_loss += 1
+                    break
+                case 2:
+                    player1.num_loss += 1
+                    player2.num_wins += 1
+                    break
+                case _:
+                    player1.num_tie += 1
+                    player2.num_tie += 1  
+                    break   
+        if curr_player == 1:
+            curr_player = 2
+        else:
+            curr_player = 1
+    return turns
+
+def player_vs_alphabeta(player1: player, player2: player, game:m, depth: int = 10):
+    """
+    Assumes player 1 is alphabeta, player 2 is player.
+    """
+    playing = True
+    curr_player = 1
+    turns = 0
+    
+    
+    
+    while(playing):
+        
+        ab_obj = AB_NEW.AB_OPTIMIZED(game)
+        
+        if curr_player==1:
+            status = game.play(ab_obj.alphabeta_search(depth), game.board, 1)
+        if curr_player==2:
+            status = game.play(game.valid_move_helper(game.board, curr_player),game.board, 2)
+        # print(status, "stones: ", find_total_stones(game))
+        game.display_board(game.board,curr_player)
         turns+=1
         if status < 0 :
             print("Failed")
@@ -135,10 +218,10 @@ def main():
     total_turns = 0
     
     
-    for i in range(3):
+    for i in range(1):
         
         game = m.Mancala()
-        total_turns += play_game_alphabeta_rand(player1, player2, game, 10)
+        total_turns += player_vs_alphabeta(player1, player2, game, 10)
         
         
         print("==============================player1==============================")
@@ -172,8 +255,8 @@ def play_game_and_update_stats(args):
 def new_main():
     start_time = time.time()
 
-    num_games = 100
-    depth = 12
+    num_games = 500
+    depth = 8
     
     # Create game instances and depth parameters
     games = [m.Mancala() for _ in range(num_games)]

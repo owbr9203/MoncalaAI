@@ -74,6 +74,27 @@ class Mancala:
         random_pit = random.randint(0, len(pits) - 1)
         return pits[random_pit] #Returns the random 0-index pit
     
+    def valid_move_helper(self,board,current_player):
+        """
+        Given a board and input gets valid moves and asks player to make one of those moves
+        """
+        valid = False
+        pits = self.valid_moves(board,current_player)
+        translated_pits = [pit+1 if current_player==1 else (pit-self.p2_pits_index[0]+1) for pit in pits]
+        print(f"Available actions for P{current_player}:")
+        for pit in translated_pits:
+            print(f"Pit {pit}")
+        while not valid:
+            action = int(input("Choose a pit: "))
+            if action in translated_pits:
+                valid = True
+                if current_player==1:
+                    return action-1
+                else:
+                    return action+self.p2_pits_index[0]-1
+            else:
+                print("Not a valid pit, try again.")
+    
     def _calculate_opposite_pit(self, current_pit):
         """Helper method to calculate the opposite pit index"""
         return self.p2_mancala_index - current_pit - 1

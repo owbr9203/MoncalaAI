@@ -14,15 +14,21 @@ class AB_OPTIMIZED:
     def utility(self, board: list, player=1):
         """
         Calculates the utility of an outcome for a player based on an integer representing a current state.
+        Added a heuristic that leans towards moves that give player more options and not forcing them into having too few pits
         """
-        #TO-DO: See if this can/should be altered to work with difference in marbles rather than simply a winning state
-
-        #Pros of just using terminal states: Easy, stops everything if a win is found
-        #Pros of using difference in marbles: More complicated, may have to rework winning_eval or make a new method, could be much less expensive since a state of 32 to 4 may not be a winning state but is a good indicator of optimal play.
+        p1_heuristic = 0
+        p2_heuristic = 0
+        for pit_index in range(self.man_obj.p1_mancala_index): #For every pit on player 1's side
+                if board[pit_index]==0: #If player 1 has empty pits...
+                    p1_heuristic+=1
+                if board[pit_index+self.man_obj.p2_pits_index[0]]==0: #If player 2 has empty pits...
+                    p2_heuristic+=1
         if player==1:
-            return board[self.man_obj.p1_mancala_index] - board[self.man_obj.p2_mancala_index]
+            heuristic = (0.5)*(p2_heuristic-p1_heuristic)
+            return board[self.man_obj.p1_mancala_index] - board[self.man_obj.p2_mancala_index] + heuristic
         else:
-            return board[self.man_obj.p2_mancala_index] - board[self.man_obj.p1_mancala_index]
+            heuristic = (0.5)*(p1_heuristic-p2_heuristic)
+            return board[self.man_obj.p2_mancala_index] - board[self.man_obj.p1_mancala_index] + heuristic
 
 
     def max_value(self, board, alpha, beta, depth, player):
